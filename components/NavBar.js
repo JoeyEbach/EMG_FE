@@ -6,27 +6,37 @@ import {
   Container,
   Nav,
   Button,
+  Image,
 } from 'react-bootstrap';
 import { signOut } from '../utils/auth';
 
 export default function NavBar() {
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+    <Navbar className="navbar" collapseOnSelect expand="lg">
       <Container>
         <Link passHref href="/">
-          <Navbar.Brand>CHANGE ME</Navbar.Brand>
+          <Image src="https://i.ibb.co/n3yTtgB/E.jpg" className="navImage" />
         </Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             {/* CLOSE NAVBAR ON LINK SELECTION: https://stackoverflow.com/questions/72813635/collapse-on-select-react-bootstrap-navbar-with-nextjs-not-working */}
-            <Link passHref href="/">
-              <Nav.Link>Home</Nav.Link>
+            <Link passHref href="/my-projects">
+              <Nav.Link className="navHov">My Projects</Nav.Link>
             </Link>
-            <Link passHref href="/delete-me">
-              <Nav.Link>Delete Me</Nav.Link>
+            <Link passHref href="/all-producers">
+              <Nav.Link className="navHov">Producers</Nav.Link>
             </Link>
-            <Button variant="danger" onClick={signOut}>
+            <Link passHref href="/services">
+              <Nav.Link className="navHov">Services</Nav.Link>
+            </Link>
+            <Link passHref href="/profile">
+              <Nav.Link className="navHov">My Profile</Nav.Link>
+            </Link>
+            <Button
+              className="heading signOut"
+              onClick={signOut}
+            >
               Sign Out
             </Button>
           </Nav>
