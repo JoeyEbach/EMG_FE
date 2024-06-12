@@ -1,26 +1,64 @@
-import { Button } from 'react-bootstrap';
-import { signOut } from '../utils/auth';
+import { useEffect, useState } from 'react';
+import { checkUser } from '../utils/auth';
 import { useAuth } from '../utils/context/authContext';
+import RegisterForm from '../components/RegisterForm';
+import { customerProjects, producerProjects } from '../api/projectData';
+import ProjectCard from '../components/cards/ProjectCard';
 
 function Home() {
+  const [thisUser, setThisUser] = useState();
+  const [userProjects, setUserProjects] = useState([]);
   const { user } = useAuth();
+  document.querySelector('body').setAttribute('data-theme', 'site');
+
+  const currentUser = () => {
+    checkUser(user.uid)?.then((u) => {
+      if (u.uid) {
+        setThisUser(u);
+      } else {
+        setThisUser(null);
+      }
+    });
+  };
+
+  useEffect(() => {
+    currentUser();
+  }, [user]);
+
+  const getProjects = async () => {
+    if (thisUser) {
+      if (thisUser.isProducer) {
+        const pProjects = await producerProjects(thisUser.id);
+        const current = pProjects?.filter((pp) => !pp.isComplete);
+        setUserProjects(current);
+      } else {
+        const cProjects = await customerProjects(thisUser.id);
+        const current = cProjects?.filter((cp) => !cp.isCompleted);
+        setUserProjects(current);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getProjects();
+  }, [thisUser]);
+
   return (
-    <div
-      className="text-center d-flex flex-column justify-content-center align-content-center"
-      style={{
-        height: '90vh',
-        padding: '30px',
-        maxWidth: '400px',
-        margin: '0 auto',
-      }}
-    >
-      <h1>Hello {user.fbUser.displayName}! </h1>
-      <p>Your Bio: {user.bio}</p>
-      <p>Click the button below to logout!</p>
-      <Button variant="danger" type="button" size="lg" className="copy-btn" onClick={signOut}>
-        Sign Out
-      </Button>
-    </div>
+    <>
+      {thisUser === null ? (<RegisterForm />) : (
+        <div>
+          <h1 className="heading center" style={{ marginTop: '50px' }}>Welcome back {user.fbUser.displayName}! </h1>
+          <h5 className="heading center" style={{ marginBottom: '30px' }}>Here are your current active projects:</h5>
+          <div className="projectCards">
+            {userProjects.length ? userProjects?.map((up) => (
+              !up.complete && (
+                <ProjectCard key={up.id} projObj={up} />
+              )
+            )) : <p>No active projects found.</p>}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

@@ -3,23 +3,14 @@ import { Button } from 'react-bootstrap';
 import { signIn } from '../utils/auth';
 
 function Signin() {
+  document.querySelector('body').setAttribute('data-theme', 'home');
+
   return (
-    <div
-      className="text-center d-flex flex-column justify-content-center align-content-center"
-      style={{
-        height: '90vh',
-        padding: '30px',
-        margin: '0 auto',
-        zIndex: 1,
-        minHeight: '25rem',
-        width: '100%',
-        minWidth: '30rem',
-        paddingBlock: '0 5rem',
-      }}
-    >
-      <h1>Hi there!</h1>
-      <p>Click the button below to login!</p>
-      <Button type="button" size="lg" className="copy-btn" onClick={signIn}>
+    <div>
+      <h1 className="heading center" style={{ marginTop: '225px' }}>Welcome to EMG!</h1>
+      <p className="info center" style={{ marginBottom: '15px' }}>The artist, songwriter, producer connection hub.</p>
+      <p className="info center" style={{ marginBottom: '5px' }}>Click the button below to login!</p>
+      <Button type="button" className="copy-btn signIn center" onClick={signIn}>
         Sign In
       </Button>
     </div>
